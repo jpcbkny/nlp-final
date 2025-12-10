@@ -1,11 +1,11 @@
 from gensim.models import Word2Vec
 
 # Read dem corpus from disc
-with open("demText.txt") as f:
+with open("corpora/demText.txt") as f:
     demModel = f.read()
 
 # Read rep corpus from disc
-with open("repText.txt") as f:
+with open("corpora/repText.txt") as f:
     repModel = f.read()
 
 demModel = Word2Vec(demSents, epochs=25, window=4)

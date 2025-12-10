@@ -32,7 +32,9 @@ def get_sentences(text: str) -> list[list[str]]:
 
 # creates text of r/democrats by going through every utterance in the subreddit and adding it with a newline to a string
 demText = ""
+
 demGenerator = demCorpus.iter_utterances()
+
 for utterance in demGenerator:
     demText += "\n"
     demText += utterance.text
@@ -53,13 +55,13 @@ demSents = get_sentences(demText)
 repSents = get_sentences(repText)
 
 # write that string into a text doc
-with open("demText.txt", "w", encoding="utf-8-sig") as f:
+with open("corpora/demText.txt", "w", encoding="utf-8-sig") as f:
     f.write(demText)
 
 print("demText written!")
 
 # write that string into a text doc
-with open("repText.txt", "w", encoding="utf-8-sig") as f:
+with open("corpora/repText.txt", "w", encoding="utf-8-sig") as f:
     f.write(repText)
 
 print("repText written!")
