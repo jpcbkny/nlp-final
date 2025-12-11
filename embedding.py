@@ -4,7 +4,7 @@ from gensim.models import Word2Vec
 from procrustes import smart_procrustes_align_gensim
 import numpy as np
 import pandas as pd
-from plotnine import ggplot, aes, geom_col, theme_classic, scale_fill_manual, labs
+from plotnine import ggplot, aes, geom_col, theme_classic, scale_fill_manual, labs, element_text, theme
 from spacy.lang.en import English
 
 nlp = English(pipeline=[])
@@ -37,14 +37,22 @@ with open("corpora/repText.txt") as f:
     repText = f.read()
     repSents = get_sentences(repText)
 
+# TODO: ignore words with low frequencies
+# TODO: find ideal threshold
+
 demModel = Word2Vec(demSents, epochs=25, window=4)
 repModel = Word2Vec(repSents, epochs=25, window=4)
 
+print("Word2Vec models generated")
+
+repModelAligned = smart_procrustes_align_gensim(demModel, repModel)
+
+print("Embedding spaces aligned")
+
 demVec = demModel.wv
-repVec = repModel.wv
+repVec = repModelAligned.wv
 
-repVecAligned = smart_procrustes_align_gensim(demModel, repModel)
-
+print("")
 
 def similarity_print(vec, target: str, subName: str, n: int = 10):
 
@@ -56,29 +64,36 @@ def similarity_print(vec, target: str, subName: str, n: int = 10):
 
 TARGET = "taxes"
 
+
+
+words = []
+values = []
+communities = []
+
+for word, value in demVec.most_similar(TARGET, topn=10):
+    words.append(word)
+    values.append(value)
+    communities.append("r/democrats")
+
+for word, value in repVec.most_similar(TARGET, topn=10):
+    words.append(word)
+    values.append(value)
+    communities.append("r/republicans")
+
 df = pd.DataFrame({
-    "Community" : [],
-    "Word" : [],
-    "Similarity" : []
+    "Community" : communities,
+    "Word" : words,
+    "Similarity" : values
 })
 
-i = 0
-for word, value in demVec.most_similar(TARGET, topn=50):
-    df.iloc[i] = ["r/democrats", word, value]
-    i += 1
-
-for word, value in demVec.most_similar(TARGET, topn=50):
-    df.iloc[i] = ["r/republicans", word, value]
-    i += 1
 
 p = (ggplot(df, aes(x="Word", y="Similarity", fill="Community")) +
  geom_col(position="dodge") +
  scale_fill_manual(values={"r/republicans" : "red", "r/democrats" : "blue"}) +
  labs(title='Semantic Similarity between "taxes" and Related Words') +
- theme_classic())
+ theme(axis_text_x=element_text(angle=45)))
 
-fig = p.draw()
-fig.show()
+p.save("taxes.png")
 
 similarity_print(demVec, "taxes", "democrats")
-similarity_print(repVecAligned, "taxes", "republicans")
+similarity_print(repVec, "taxes", "republicans")

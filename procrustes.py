@@ -1,3 +1,5 @@
+import numpy as np
+
 def smart_procrustes_align_gensim(base_embed, other_embed, words=None):
     """
     Original script: https://gist.github.com/quadrismegistus/09a93e219a6ffc4f216fb85235535faf
