@@ -1,37 +1,22 @@
 #!/usr/bin/env python3
 
-# import nltk
-# nltk.download('punkt')
+import nltk
+nltk.download('punkt')
 from convokit import Corpus, download
-demCorpus = Corpus(filename=download("subreddit-democrats"))
-repCorpus = Corpus(filename=download("subreddit-republicans"))
 
-# creates text of r/democrats by going through every utterance in the subreddit and adding it with a newline to a string
-demText = ""
-demGenerator = demCorpus.iter_utterances()
-for utterance in demGenerator:
-    demText += "\n"
-    demText += utterance.text
+with open("subreddit_names.txt") as f:
+    for line in f:
+        name = line.strip()
+        corpus = Corpus(filename=download(f"subreddit-{name}"))
+        print(f"{name} downloaded!")
 
-print("demText generated!")
+        text = ""
+        generator = corpus.iter_utterances()
+        for utterance in generator:
+            text += "\n"
+            text += utterance.text
+        print(f"{name} text generated!")
 
-# creates text of r/republicans by going through every utterance in the subreddit and adding it with a newline to a string
-repText = ""
-repGenerator = repCorpus.iter_utterances()
-for utterance in repGenerator:
-    repText += "\n"
-    repText += utterance.text
-
-print("repText generated!")
-
-# write that string into a text doc
-with open("corpora/demText.txt", "w", encoding="utf-8-sig") as f:
-    f.write(demText)
-
-print("demText written!")
-
-# write that string into a text doc
-with open("corpora/repText.txt", "w", encoding="utf-8-sig") as f:
-    f.write(repText)
-
-print("repText written!")
+        with open(f"corpora/{name}.txt", "w", encoding="utf-8-sig") as f:
+            f.write(text)
+        print(f"{name} text written!")
