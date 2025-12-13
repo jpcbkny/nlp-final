@@ -3,3 +3,4 @@ convokit
 spacy
 plotnine
 nltk
+jupyter
