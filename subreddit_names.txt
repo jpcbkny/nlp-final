@@ -1,6 +1,6 @@
 PoliticalDiscussion
 geopolitics
 Freethought
-moderatePolitics
+moderatepolitics
 NeutralPolitics
 Ask_Politics

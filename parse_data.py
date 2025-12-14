@@ -8,18 +8,19 @@ with open("subreddit_names.txt") as f:
     for line in f:
         name = line.strip()
 
-        corpus = Corpus(filename=download(f"subreddit-{name}"), exclude_utterance_meta=["score", "top_level_comment", "retrieved_on", "gilded", "gildings", "stickied", "permalink", "author_flair_text"])
-        # print(f"{name} downloaded!")
+        # end index of 500K added to keep download managable
+        corpus = Corpus(filename=download(f"subreddit-{name}"), utterance_end_index=500000, exclude_utterance_meta=["score", "top_level_comment", "retrieved_on", "gilded", "gildings", "stickied", "permalink", "author_flair_text"])
+        print(f"{name} downloaded!")
 
-        print(f"{name} summary stats:")
-        corpus.print_summary_stats()
+        # print(f"{name} summary stats:")
+        # corpus.print_summary_stats()
 
-        # text = ""
-        # generator = corpus.iter_utterances()
-        # for utterance in generator:
-        #     text += f"{utterance.text}\n"
-        # print(f"{name} text generated!")
+        text = ""
+        generator = corpus.iter_utterances()
+        for utterance in generator:
+            text += f"{utterance.text}\n"
+        print(f"{name} text generated!")
 
-        # with open(f"corpora/{name}.txt", "w", encoding="utf-8-sig") as f:
-        #     f.write(text)
-        # print(f"{name} text written!")
+        with open(f"corpora/{name}.txt", "w", encoding="utf-8-sig") as f:
+            f.write(text)
+        print(f"{name} text written!")
