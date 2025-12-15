@@ -1,20 +1,25 @@
 # nlp-final
 
-Our data was too big to fit onto github.
-However, it can be easily and quickly obtained by doing the following in the terminal to run our code:
 
-first install requirements:
-`pip install -r requirements.txt`
+## Run the code
 
-then run our data parser: 
-`python parse_data.py`
-Note: the "subreddit_names.txt" file can be changed with (CASE SENSITIVE) subreddit names you wish to parse and run the model on instead each separated by a newline 
+1. Install dependencies
 
-At this point you will have text files of the selected subreddits.
+    `pip install -r requirements.txt`
 
-Then to compare their embedding spaces, run:
-`python embedding.py`
+2. Download the dataset
+
+    `python parse_data.py`
+
+3. Run our experiment
+
+    `jupyter lab`
+
+    This will launch a jupyter server in your browser. Open `embedding.ipynb`, then click the ⏩ button at the top of the browser. This will our experiment. You can also run our notebook in VSCode with the Jupyter extension
+
 
 Citations:
-Procrustes code obtained from https://gist.github.com/zhicongchen/9e23d5c3f1e5b1293b16133485cd17d8 
-get_sentences() function from assignment 4
+
+`procrustes.py` from https://gist.github.com/zhicongchen/9e23d5c3f1e5b1293b16133485cd17d8 
+
+`get_sentences()` from CMPU-366, Assignment 4
