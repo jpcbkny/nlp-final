@@ -21,6 +21,11 @@ def smart_procrustes_align_gensim(base_embed, other_embed, words=None):
     # make sure vocabulary and indices are aligned
     in_base_embed, in_other_embed = intersection_align_gensim(base_embed, other_embed, words=words)
 
+    # MY ADDITIONS
+    # Need to flush cache since norms were already
+    # computed for unaligned embeddings
+    in_other_embed.wv.norms = None
+
     # get the (normalized) embedding matrices
     base_vecs = in_base_embed.wv.get_normed_vectors()
     other_vecs = in_other_embed.wv.get_normed_vectors()
@@ -33,7 +38,7 @@ def smart_procrustes_align_gensim(base_embed, other_embed, words=None):
     ortho = u.dot(v) 
     # Replace original array with modified one, i.e. multiplying the embedding matrix by "ortho"
     other_embed.wv.vectors = (other_embed.wv.vectors).dot(ortho)    
-    
+
     return other_embed
 
 def intersection_align_gensim(m1, m2, words=None):
@@ -82,7 +87,8 @@ def intersection_align_gensim(m1, m2, words=None):
             new_index_to_key.append(key)
         m.wv.key_to_index = new_key_to_index
         m.wv.index_to_key = new_index_to_key
-        
+        m.wv.norms = None
+
         print(len(m.wv.key_to_index), len(m.wv.vectors))
-        
+
     return (m1,m2)
