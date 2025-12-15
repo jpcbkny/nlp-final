@@ -17,6 +17,8 @@
 
     This will launch a jupyter server in your browser. Open `embedding.ipynb`, then click the ⏩ button at the top of the browser. This will our experiment. You can also run our notebook in VSCode with the Jupyter extension
 
+    Our experiments sometimes produce errors. If they do, just run it again from the beginning.
+
 
 Citations:
 
